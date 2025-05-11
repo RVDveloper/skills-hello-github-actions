@@ -5,16 +5,11 @@ on:
 permissions:
   pull-requests: write
 jobs:
-  comment:
+  build:
+    name: Post welcome comment
     runs-on: ubuntu-latest
     steps:
-      - name: Post welcome comment
-        uses: actions/github-script@v6
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '👋 ¡Hola RVDveloper Te saluda! Bienvenido al repositorio. Gracias por tu primer pull request 🎉'
-            })
+      - run: gh pr comment $PR_URL --body "Welcome to the repository!"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
